@@ -3,23 +3,28 @@ export default {
   data() {
     return {
       newName: '',
+      newNumber: '',
       people: [{
-        name: 'Arto Hellas'
+        name: 'Arto Hellas',
+        number: '23345'
       }]
     }
   },
   methods: {
     addPerson() {
-      if (this.people.find(person => person.name === this.newName)) {
+      let isAlreadyExist = this.people.find(person => person.name === this.newName)
+      if (isAlreadyExist) {
         alert(`${this.newName} is already added to the phonebook!`)
         return
       }
 
       const newPerson = {
-        name: this.newName
+        name: this.newName,
+        number: this.newNumber
       }
       this.people.push(newPerson)
       this.newName = ''
+      this.newNumber = ''
     }
   }
 }
@@ -33,11 +38,16 @@ export default {
           name: <input v-model="newName"/>
         </div>
         <div>
+          number: <input v-model="newNumber"/>
+        </div>
+        <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <div v-for="person in people" :key="person.name">{{ person.name }}</div>
+      <div v-for="person in people" :key="person.name">
+        {{ person.name }} {{ person.number }}
+      </div>
     </div>
 </template>
 
