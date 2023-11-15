@@ -24,6 +24,8 @@ let people = [
   },
 ]
 
+app.use(express.json())
+
 app.get('/info', (req, res) => {
   res.send(`
     <div>Phonebook has info for ${people.length} people</div>
@@ -52,6 +54,31 @@ app.delete('/api/people/:id', (req, res) => {
 
   people = people.filter((person) => person.id !== id)
   res.status(204).end()
+})
+
+app.post('/api/people', (req, res) => {
+  const { name, number } = req.body
+
+  if (name === undefined || number === undefined) {
+    return res.status(400).json({
+      error: 'Name or number is missing',
+    })
+  }
+
+  const doesExist = people.find((person) => person.name === name)
+  if (doesExist) {
+    return res.status(400).json({
+      error: 'Person with such name already exists',
+    })
+  }
+
+  const newPerson = {
+    name,
+    number: String(number),
+    id: people.length + Math.floor(Math.random() * 1000),
+  }
+  people.push(newPerson)
+  res.status(201).json(newPerson)
 })
 
 const PORT = 3001
