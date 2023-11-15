@@ -1,13 +1,9 @@
 <script>
-import Header from './components/Header.vue'
-import Content from './components/Content.vue'
-import Total from './components/Total.vue'
+import Course from './components/Course.vue'
 
 export default {
   components: {
-    Header,
-    Content,
-    Total
+    Course
   },
   data() {
     return {
@@ -35,10 +31,8 @@ export default {
 
 <template>
   <div>
-      <Header :name="course.name" />
-      <Content :parts="course.parts"/>
-      <Total :parts="course.parts" />
-    </div>
+    <Course :course="course"/>
+  </div>
 </template>
 
 <style scoped>
