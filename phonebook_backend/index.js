@@ -1,7 +1,7 @@
 import express from 'express'
 const app = express()
 
-const people = [
+let people = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -45,6 +45,13 @@ app.get('/api/people/:id', (req, res) => {
     })
   }
   res.json(person)
+})
+
+app.delete('/api/people/:id', (req, res) => {
+  const id = Number(req.params.id)
+
+  people = people.filter((person) => person.id !== id)
+  res.status(204).end()
 })
 
 const PORT = 3001
