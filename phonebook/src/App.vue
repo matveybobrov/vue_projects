@@ -24,11 +24,18 @@ export default {
         alert(`${newPerson.name} is already added to the phonebook!`)
         return
       }
-      this.people.push(newPerson)
+
+      personService.create(newPerson)
+      .then(createdPerson => {
+        this.people.push(createdPerson)
+      })
     },
   },
-  async mounted() {
-    this.people = await personService.getAll()
+  mounted() {
+    personService.getAll()
+    .then(initialPeople => {
+      this.people = initialPeople
+    })
   }
 }
 </script>

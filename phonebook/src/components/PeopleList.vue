@@ -16,7 +16,7 @@ export default {
   <div v-if="people.length === 0">No people in the phonebook</div>
   <div v-else-if="filteredPeople.length === 0">No people with such filter</div>
   <div v-else>
-    <div v-for="person in filteredPeople" :key="person.name">
+    <div v-for="person in filteredPeople" :key="person.id">
       {{ person.name }} {{ person.number }}
     </div>
   </div>
