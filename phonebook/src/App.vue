@@ -10,6 +10,11 @@ export default {
   },
   methods: {
     addPerson() {
+      if (this.people.find(person => person.name === this.newName)) {
+        alert(`${this.newName} is already added to the phonebook!`)
+        return
+      }
+
       const newPerson = {
         name: this.newName
       }
