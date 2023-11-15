@@ -1,33 +1,28 @@
 <script>
+import PeopleFilter from './components/PeopleFilter.vue'
+import PeopleForm from './components/PeopleForm.vue'
+import PeopleList from './components/PeopleList.vue'
+
 export default {
+  components: {
+    PeopleFilter,
+    PeopleForm,
+    PeopleList
+  },
   data() {
     return {
-      newName: '',
-      newNumber: '',
       filter: '',
       people: []
     }
   },
   methods: {
-    addPerson() {
-      let isAlreadyExist = this.people.find(person => person.name === this.newName)
+    addPerson(newPerson) {
+      let isAlreadyExist = this.people.find(person => person.name === newPerson.name)
       if (isAlreadyExist) {
-        alert(`${this.newName} is already added to the phonebook!`)
+        alert(`${newPerson.name} is already added to the phonebook!`)
         return
       }
-
-      const newPerson = {
-        name: this.newName,
-        number: this.newNumber
-      }
       this.people.push(newPerson)
-      this.newName = ''
-      this.newNumber = ''
-    }
-  },
-  computed: {
-    filteredPeople() {
-      return this.people.filter(person => person.name.toLowerCase().includes(this.filter.toLowerCase()))
     }
   }
 }
@@ -36,30 +31,13 @@ export default {
 <template>
    <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with: <input v-model="filter">
-      </div>
+      <PeopleFilter v-model:filter="filter"/>
+
       <h2>Add a new</h2>
-      <form @submit.prevent="addPerson">
-        <div>
-          name: <input v-model="newName"/>
-        </div>
-        <div>
-          number: <input v-model="newNumber"/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PeopleForm @addPerson="addPerson"/>
 
       <h2>Numbers</h2>
-      <div v-if="people.length === 0">No people in the phonebook</div>
-      <div v-else-if="filteredPeople.length === 0">No people with such filter</div>
-      <div v-else>
-        <div v-for="person in filteredPeople" :key="person.name">
-          {{ person.name }} {{ person.number }}
-        </div>
-      </div>
+      <PeopleList :people="people" :filter="filter"/>
     </div>
 </template>
 
