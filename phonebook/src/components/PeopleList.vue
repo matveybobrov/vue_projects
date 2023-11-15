@@ -4,6 +4,7 @@ export default {
     people: Array,
     filter: String
   },
+  emits: ['removePerson'],
   computed: {
     filteredPeople() {
       return this.people.filter(person => person.name.toLowerCase().includes(this.filter.toLowerCase()))
@@ -18,6 +19,7 @@ export default {
   <div v-else>
     <div v-for="person in filteredPeople" :key="person.id">
       {{ person.name }} {{ person.number }}
+      <button @click="$emit('removePerson', person.id)">remove</button>
     </div>
   </div>
 </template>

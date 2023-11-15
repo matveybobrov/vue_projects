@@ -30,6 +30,12 @@ export default {
         this.people.push(createdPerson)
       })
     },
+    removePerson(id) {
+      personService.remove(id)
+      .then(() => {
+        this.people = this.people.filter(person => person.id !== id)
+      })
+    }
   },
   mounted() {
     personService.getAll()
@@ -49,7 +55,7 @@ export default {
       <PeopleForm @addPerson="addPerson"/>
 
       <h2>Numbers</h2>
-      <PeopleList :people="people" :filter="filter"/>
+      <PeopleList @removePerson="removePerson" :people="people" :filter="filter"/>
     </div>
 </template>
 
