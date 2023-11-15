@@ -4,10 +4,8 @@ export default {
     return {
       newName: '',
       newNumber: '',
-      people: [{
-        name: 'Arto Hellas',
-        number: '23345'
-      }]
+      filter: '',
+      people: []
     }
   },
   methods: {
@@ -26,6 +24,11 @@ export default {
       this.newName = ''
       this.newNumber = ''
     }
+  },
+  computed: {
+    filteredPeople() {
+      return this.people.filter(person => person.name.toLowerCase().includes(this.filter.toLowerCase()))
+    }
   }
 }
 </script>
@@ -33,6 +36,10 @@ export default {
 <template>
    <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with: <input v-model="filter">
+      </div>
+      <h2>Add a new</h2>
       <form @submit.prevent="addPerson">
         <div>
           name: <input v-model="newName"/>
@@ -44,9 +51,14 @@ export default {
           <button type="submit">add</button>
         </div>
       </form>
+
       <h2>Numbers</h2>
-      <div v-for="person in people" :key="person.name">
-        {{ person.name }} {{ person.number }}
+      <div v-if="people.length === 0">No people in the phonebook</div>
+      <div v-else-if="filteredPeople.length === 0">No people with such filter</div>
+      <div v-else>
+        <div v-for="person in filteredPeople" :key="person.name">
+          {{ person.name }} {{ person.number }}
+        </div>
       </div>
     </div>
 </template>
