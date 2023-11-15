@@ -2,15 +2,17 @@
 export default {
   props: {
     people: Array,
-    filter: String
+    filter: String,
   },
-  emits: ['removePerson'],
+  emits: ["removePerson"],
   computed: {
     filteredPeople() {
-      return this.people.filter(person => person.name.toLowerCase().includes(this.filter.toLowerCase()))
-    }
-  }
-}
+      return this.people.filter((person) =>
+        person.name.toLowerCase().includes(this.filter.toLowerCase())
+      );
+    },
+  },
+};
 </script>
 
 <template>
@@ -19,7 +21,7 @@ export default {
   <div v-else>
     <div v-for="person in filteredPeople" :key="person.id">
       {{ person.name }} {{ person.number }}
-      <button @click="$emit('removePerson', person.id)">remove</button>
+      <button @click="$emit('removePerson', person)">remove</button>
     </div>
   </div>
 </template>
