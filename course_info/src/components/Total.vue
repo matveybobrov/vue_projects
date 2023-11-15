@@ -1,12 +1,16 @@
 <script>
   export default {
-    props: ['parts']
+    props: ['parts'],
+    computed: {
+      total() {
+        return this.parts.reduce((acc, curr) => acc += curr.exercises, 0)
+      }
+    }
   }
 </script>
 
 <template>
-  <p>
-    Number of exercises: 
-    {{parts.reduce((acc, curr) => acc += curr.exercises, 0)}}
-  </p>
+  <b>
+    Total of {{ total }} exercises
+  </b>
 </template>
