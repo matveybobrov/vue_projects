@@ -1,28 +1,11 @@
 import express from 'express'
-const app = express()
+import cors from 'cors'
+import 'dotenv/config'
 
-let people = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456',
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523',
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345',
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122',
-  },
-]
+import Person from './models/person.js'
+
+const app = express()
+app.use(cors())
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -43,19 +26,15 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/people', (req, res) => {
-  res.json(people)
+  Person.find({}).then((people) => {
+    res.json(people)
+  })
 })
 
 app.get('/api/people/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = people.find((person) => person.id === id)
-
-  if (!person) {
-    return res.status(404).json({
-      error: 'No person with such id',
-    })
-  }
-  res.json(person)
+  Person.findById(req.params.id).then((foundPerson) => {
+    res.json(foundPerson)
+  })
 })
 
 app.delete('/api/people/:id', (req, res) => {
@@ -74,20 +53,14 @@ app.post('/api/people', (req, res) => {
     })
   }
 
-  const doesExist = people.find((person) => person.name === name)
-  if (doesExist) {
-    return res.status(400).json({
-      error: 'Person with such name already exists',
-    })
-  }
-
-  const newPerson = {
+  const newPerson = new Person({
     name,
-    number: String(number),
-    id: people.length + Math.floor(Math.random() * 1000),
-  }
-  people.push(newPerson)
-  res.status(201).json(newPerson)
+    number,
+  })
+
+  newPerson.save().then((savedPerson) => {
+    res.status(201).json(savedPerson)
+  })
 })
 
 const unknownEndpoint = (request, response) => {
@@ -96,7 +69,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
