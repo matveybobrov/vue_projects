@@ -10,7 +10,7 @@ import Part from './Part.vue'
 </script>
 
 <template>
-  <div v-for="part in parts">
-    <Part :name="part.name" :exercises="part.exercises"/>
+  <div>
+    <Part v-for="part in parts" :name="part.name" :exercises="part.exercises"/>
   </div>
 </template>
