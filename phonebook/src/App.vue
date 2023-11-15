@@ -21,7 +21,8 @@ export default {
     addPerson(newPerson) {
       let isAlreadyExist = this.people.find(person => person.name === newPerson.name)
       if (isAlreadyExist) {
-        alert(`${newPerson.name} is already added to the phonebook!`)
+        const shouldUpdate = confirm(`${newPerson.name} is already added to the phonebook! Should update?`)
+        shouldUpdate && this.updatePerson(newPerson)
         return
       }
 
@@ -34,6 +35,16 @@ export default {
       personService.remove(id)
       .then(() => {
         this.people = this.people.filter(person => person.id !== id)
+      })
+    },
+    updatePerson(personToUpdate) {
+      const id = this.people.find(person => person.name === personToUpdate.name).id
+      personToUpdate.id = id
+
+      personService.update(personToUpdate)
+      .then(updatedPerson => {
+        const updatedPeople = this.people.map(person => person.id === updatedPerson.id ? updatedPerson : person)
+        this.people = updatedPeople
       })
     }
   },
