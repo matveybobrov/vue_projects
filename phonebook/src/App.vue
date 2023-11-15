@@ -1,4 +1,6 @@
 <script>
+import personService from './services/people'
+
 import PeopleFilter from './components/PeopleFilter.vue'
 import PeopleForm from './components/PeopleForm.vue'
 import PeopleList from './components/PeopleList.vue'
@@ -23,7 +25,10 @@ export default {
         return
       }
       this.people.push(newPerson)
-    }
+    },
+  },
+  async mounted() {
+    this.people = await personService.getAll()
   }
 }
 </script>
