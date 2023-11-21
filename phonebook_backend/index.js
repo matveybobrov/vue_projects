@@ -58,7 +58,7 @@ app.delete('/api/people/:id', (req, res, next) => {
 app.post('/api/people', (req, res) => {
   const { name, number } = req.body
 
-  if (name === undefined || number === undefined) {
+  if (name === '' || number === '') {
     return res.status(400).json({
       error: 'Name or number is missing',
     })
@@ -72,6 +72,21 @@ app.post('/api/people', (req, res) => {
   newPerson.save().then((savedPerson) => {
     res.status(201).json(savedPerson)
   })
+})
+
+app.put('/api/people/:id', (req, res, next) => {
+  const { name, number } = req.body
+  if (name === '' || number === '') {
+    return res.status(400).json({
+      error: 'Name or number is missing',
+    })
+  }
+
+  Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((updatedPerson) => {
+      res.json(updatedPerson)
+    })
+    .catch((err) => next(err))
 })
 
 const unknownEndpoint = (request, response) => {

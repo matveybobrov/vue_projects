@@ -34,9 +34,13 @@ export default {
         return;
       }
 
-      personService.create(newPerson).then((createdPerson) => {
-        this.people.push(createdPerson);
-      });
+      personService.create(newPerson)
+        .then((createdPerson) => {
+          this.people.push(createdPerson);
+        })
+        .catch(err => {
+          this.showNotification(err.response.data.error, 'error')
+        })
       this.showNotification(`${newPerson.name} was sucessfully added to the phonebook!`);
     },
     removePerson(person) {
@@ -55,14 +59,16 @@ export default {
       const id = this.people.find((person) => person.name === personToUpdate.name).id;
       personToUpdate.id = id;
 
-      personService.update(personToUpdate).then((updatedPerson) => {
-        const updatedPeople = this.people.map((person) =>
-          person.id === updatedPerson.id ? updatedPerson : person
-        );
-        this.people = updatedPeople;
-      });
-
-      this.showNotification(`Number of ${personToUpdate.name} was successfully updated!`);
+      personService.update(personToUpdate)
+        .then((updatedPerson) => {
+          const updatedPeople = this.people.map((person) =>
+            person.id === updatedPerson.id ? updatedPerson : person
+          );
+          this.people = updatedPeople;
+        })
+        .catch((err) => {
+          this.showNotification(err.response.data.error, 'error');
+        })
     },
     showNotification(message, isError = false) {
       this.notification = {
@@ -85,11 +91,7 @@ export default {
 <template>
   <div>
     <h2>Phonebook</h2>
-    <PeopleNotification
-      v-if="notification.message"
-      :message="notification.message"
-      :isError="notification.isError"
-    />
+    <PeopleNotification v-if="notification.message" :message="notification.message" :isError="notification.isError" />
     <PeopleFilter v-model:filter="filter" />
 
     <h2>Add a new</h2>
