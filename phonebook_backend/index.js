@@ -18,13 +18,6 @@ const requestLogger = (request, response, next) => {
 app.use(express.json())
 app.use(requestLogger)
 
-app.get('/info', (req, res) => {
-  res.send(`
-    <div>Phonebook has info for ${people.length} people</div>
-    <div>${new Date().toLocaleString()}</div>
-  `)
-})
-
 app.get('/api/people', (req, res) => {
   Person.find({}).then((people) => {
     res.json(people)
