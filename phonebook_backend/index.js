@@ -32,16 +32,28 @@ app.get('/api/people', (req, res) => {
 })
 
 app.get('/api/people/:id', (req, res) => {
-  Person.findById(req.params.id).then((foundPerson) => {
-    res.json(foundPerson)
-  })
+  Person.findById(req.params.id)
+    .then((foundPerson) => {
+      if (foundPerson) {
+        res.json(foundPerson)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).end()
+    })
 })
 
-app.delete('/api/people/:id', (req, res) => {
-  const id = Number(req.params.id)
-
-  people = people.filter((person) => person.id !== id)
-  res.status(204).end()
+app.delete('/api/people/:id', (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.status(204).end()
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 })
 
 app.post('/api/people', (req, res) => {
