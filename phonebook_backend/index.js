@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 
-import Person from './models/person.js'
+import Person from './models/person'
 
 const app = express()
 app.use(cors())
@@ -64,9 +64,7 @@ app.post('/api/people', (req, res, next) => {
 
   newPerson
     .save()
-    .then((savedPerson) => {
-      res.status(201).json(savedPerson)
-    })
+    .then((savedPerson) => res.status(201).json(savedPerson))
     .catch((err) => next(err))
 })
 
@@ -78,7 +76,10 @@ app.put('/api/people/:id', (req, res, next) => {
     })
   }
 
-  Person.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+  Person.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  })
     .then((updatedPerson) => {
       res.json(updatedPerson)
     })
