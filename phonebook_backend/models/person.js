@@ -1,19 +1,5 @@
 /* eslint-disable no-param-reassign */
 import mongoose from 'mongoose'
-import 'dotenv/config'
-
-const url = process.env.MONGODB_URI
-
-console.log(`Connecting to MongoDB...`)
-mongoose.set('strictQuery', false)
-mongoose
-  .connect(url)
-  .then(() => {
-    console.log('Connected to MongoDB')
-  })
-  .catch(() => {
-    console.log('Error connecting to MongoDB')
-  })
 
 const personSchema = new mongoose.Schema({
   name: {
